@@ -1,5 +1,7 @@
 # should be defined:
 # "SOURCES"
+# additional:
+SOURCES += ../defs.v
 VERILOGCC?=iverilog
 SIM?=vvp
 FLAGS?=-Wall -Winfloop

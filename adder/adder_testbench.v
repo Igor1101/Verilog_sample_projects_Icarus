@@ -1,4 +1,6 @@
+`include "../defs.v"
 module adder_testbench ;
+    reg clk;
     reg a,b;
     wire s, co;
     half_adder ha(a, b, s, co);
@@ -7,18 +9,22 @@ module adder_testbench ;
         b = 1'b0;
     end
     always begin
-        #5 
-        a = 1'b1;
-        b = 1'b0;
-
-        #5 
-        a = 1'b0;
-        b = 1'b1;
-
-        #5 
-        a = 1'b1;
-        b = 1'b1;
-        #5 $finish;
+        #1
+        {a, b} = { 1'b1, 1'b0};
+        #1
+        `assert (s, 1);
+        `assert (co, 0);
+        #1
+        {a, b} = { 1'b0, 1'b1};
+        #1
+        `assert (s, 1);
+        `assert (co, 0);
+        #1
+        {a, b} = { 1'b1, 1'b1};
+        #1
+        `assert (s, 0);
+        `assert (co, 1);
+        # 5 $finish;
     end
     // gen additional files
     initial
