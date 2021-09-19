@@ -55,7 +55,8 @@ module adder_testbench ;
         `assert (sh, 0);
         `assert (coh, 1);
         `assert (sf, 1);
-        `assert (cof, 0);
+        `assert (cof, 1);
+        $display("testbech test successfull");
         # 1 $finish;
     end
     // gen additional files
