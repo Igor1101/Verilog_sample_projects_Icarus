@@ -1,55 +1,39 @@
 `include "../defs.v"
 module test ;
-parameter N=10;
+parameter N=8;
+parameter SZ=32;
 reg reset;
-reg [N-1:0] i;
 reg clk; 
-reg data; 
-
-// control 
-reg shift;
-reg wri; 
-reg set;
-
+reg [N-1:0] iaddr;
 wire [N-1:0] o;
 
-shrg #(.N(N)) d(
+ROM #( .N(N), .SZ(SZ)) 
+d(
     .clk(clk), 
-    .data(data), 
-    .o(o), .i(i), 
-    .reset(reset), 
-    .set(set), 
-    .shift(shift), 
-    .wri(wri));
-    initial begin
-       clk = 0;
-       reset = 0; 
-       forever begin 
-           #1 clk = ~clk;
-       end
+    .o(o), .iaddr(iaddr), 
+    .reset(reset)
+);
+initial begin
+    clk = 0;
+    reset = 0; 
+    forever begin 
+        #1 clk = ~clk;
     end
-    always begin
-        $monitor($time, 
-        "::\tclk %b data %h o %h i %h reset %b set %b shift %b wri %b",
-        clk, data, o, i, reset, set, shift, wri );
-        #1 reset = 1;
-        #1 reset = 0;
-        #8 i = 10'h10;
-        #9 wri = 1;
-        #1 wri = 0;
-        #9 set = 1;
-        #1 set = 0;
-
-        #10 data = 1;
-        #1 shift =1;
-        #4 data = 0;
-        #3 shift =0;
-
-        #1 set = 1;
-        #1 set = 0;
-        #10 reset = 1;
-
-        #10 $finish;
+end
+always begin
+    $monitor($time, 
+    "::\tclk %b iaddr %h o %h reset %b ",
+    clk, iaddr, o, reset);
+    #1 reset = 1;
+    #1 reset = 0;
+    #8 iaddr = 8'h01;
+    #1 iaddr = iaddr + 1; 
+    #1 iaddr = iaddr + 1; 
+    #1 iaddr = iaddr + 1; 
+    #1 iaddr = iaddr + 1; 
+    #1 iaddr = iaddr + 1; 
+    #1 iaddr = iaddr + 1; 
+    #1 $finish;
 
     end
       // gen additional files
