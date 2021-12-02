@@ -21,6 +21,6 @@ clean:
 	echo "Cleaning up..."
 	rm -f *.o *_testbench $(TARGET) work*.cf e*.lst *.vcd
 view:
-	gtkwave $(VCD_FILENAME)
+	gtkwave $(VCD_FILENAME) $(VCD_OPT)
 
 all:$(TARGET)
