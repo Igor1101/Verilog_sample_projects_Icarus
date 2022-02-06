@@ -2,35 +2,33 @@
 
 module testbench;
 
-parameter PERIOD = 20;
+parameter PERIOD = 10;
 
-reg         i_clk, i_rst_n;
+reg         clk; 
+reg         reset;
 reg  [9:0]  i_freq_step;
 wire [3:0]  o_dac;
 
-NCO  nco_inst(.MAX10_CLK1_50 (i_clk), 
-                .KEY ({i_rst_n, 1'b0}),
-                .SW (i_freq_step), 
-                .VGA_R (o_dac)
+transmitter tr_inst(.clk (clk), 
+                .reset(reset),
+                .dac (o_dac)
                 );
 
 initial begin
-    i_clk = 0;
-    forever #(PERIOD/2) i_clk = ~i_clk;
+    clk = 0;
+    forever #(PERIOD/2) clk = ~clk;
 end
 
 initial begin
-    i_rst_n = 1'b0;
-    i_freq_step = 10'd64;
-
-    @(negedge i_clk) i_rst_n = 1'b1;
-
-    repeat (15) begin
-        repeat (5000) @(negedge i_clk);
-        i_freq_step = i_freq_step + 50;
+    clk = 0;
+    reset = 0; 
+    forever begin 
+        #1 clk = ~clk;
     end
-
-    $finish;  
+end
+always  begin
+    #2 reset = 1;
+    #8000 $finish;  
 end
     // gen additional files
     initial
